@@ -1,0 +1,88 @@
+<link rel="stylesheet" type="text/css" href="../style.css" />
+
+<div class="box">
+
+<h2>Final Project</h2>
+
+<h3>Solving Rubik's Cube</h3>
+
+<ul><li><strong>Proposal</strong>
+<p><img src="rubiks.jpg"/>
+<p>Use 3 or 4 of the mathematical/computational methods explored in the class to find solutions to <a href="http://en.wikipedia.org/wiki/Rubik%27s_Cube" target="blank">Rubik's Cube </a>.
+</li></ul>
+
+<ul><li><strong>Background</strong>
+<p>Rubik’s cube is a 3x3x3 cube, composed of 26 smaller cubes arranged in over the six face planes of the bigger cube. Each face has a unique color and can rotate freely, allowing in overall 18 different moves.  The cube can be seen as a finite state machine, with 901,083,404,981,813,616 possible solutions, as demonstrated by Turner and Gold in 1985, using Burnside’s lemma. Many possible short solutions have been proposed, however none has achieved the limit proposed by Berlekamp et al of 18 moves. 
+
+<p>The solutions tent to fall in to general camps. Some generalized solutions, formulate the problem in term of permutation groups, proposing planning algorithms that search efficiently over large groups of maneuvers (sequences of permutations). The other approaches are based on heuristics, usually solving for sub-sections of the cube using graph search algorithms like A*. Of this group, on of the most accepted solutions is the one proposed by Kociemba. Using a two phase algorithm, the solution first solves a small subgroup, using A* search. The second part solves the remaining subgroup, using a set of known maneuvers, searching over the permutation space.
+</li></ul>
+
+<ul><li><strong>My Approach</strong>
+<p>I am interested in this problem as a test-ground for the different techniques we learn during the course of this class. For this final project, I tried formulating the problem from different perspectives. However, due the sheer size of the cube states spaces frustrated my first attempts. I decided to reduce the problem to the 2x2x2 cube pictured here:
+
+<p><img src="pocket.jpg"/>
+
+<p>The pocket cube has a reduced space, with only 3674160 different states, making brute force solutions possible. The cube still shares enough similarities with its big brother to be interesting. There are 12 possible movements at every moment, 2 per each face. To simplify even more the problem, I only consider quarter face rotations, ignoring whole cube movements.
+
+<p>My first attempts were based on search algorithms like A*, which require a heuristic distance to the complete solution. I didn’t found using A* very interesting, since it has been widely used in similar problems with well known results. However, finding a heuristic measurement sound promising, and eventually lead to the proposed solution. Other different types of formulations will be briefly described at the end of this document.
+</li></ul>
+
+<ul><li><strong>Divide and Conquer</strong>
+<p>How do we know how close we are to the solution? Following my experience with A* I decided to create a measurement of how close is certain state of the cube from being solve. The proposed approach goes as follows: Divide the cube in its 8 constituent smaller cubes. Face rotations are position permutations over the matrix of sub-cubes and color permutations over each individual sub-cube. For each sub-cube, find all the possible states (position and color permutations) corresponding to each face rotation and can make a graph of these states. Using that graph, is possible to find the distance of each sub-cube state to it’s solve state, using algorithm like Dijkstra. The sum of all the sub-cube distances corresponds to our heuristic distance. The state graph for every sub-cube is identical, and can be seen below:
+
+<p><a href="graph.gif"><img src="graph_small.gif"/></a>
+
+</li></ul>
+
+<ul><li><strong>Simulated Annealing</strong>
+
+<p>To test the heuristic, I decided to use Simulated Annealing. Here the heuristic becomes the energy function to be minimized. Additionally, I added a bounding matrix, in which the energy was reduced when sub-cubes that are neighbors in the solved state, end up next to each other after a rotation. The application was written in java, and can be seen here:
+
+<p><applet code="rubik.RCubeApplet" archive="rubik.jar,jgrapht-0.5.3.jar" width="320" height="240"></applet>
+
+</li></ul>
+
+<ul><li><strong>Results</strong>
+
+<p>The results weren’t very encouraging. Without the bonding matrix, the application was unable to solve any cube out of 1000 randomly generated. However, after the bonding matrix was added, it was able to solve 11, which is (I think) better than just random. The length of the solutions ranged from 50 to 500 moves.
+
+</li></ul>
+
+<ul><li><strong>Other Formulations</strong>
+
+I attempted other two solutions. The first one based on convex relaxation, minimizing the heuristic distance described above, over a 6 dimensional space, representing the face rotations. My biggest problem was in formulating correct constrains, that reflected correctly the behavior of the cube. The second problem was that it wasn’t very clear to me how to obtain, once I get to the optimum, the list of permutations followed to reach that point.
+
+The second attempt was formulated, with the help of Ben Vigoda, as a graphical model, in which each node represents the vector of the possible permutations. The model should be long enough to allow the cube to be solved. At first, I could not understand how to applied this to the cube, and decided to reduce the problem to the sorting of a few variables, using only a small set of permutations. This didn’t when anywhere since the graphs for this kind of permutations are extremely loopy, and belief propagation is just and approximation.
+
+</li></ul>
+
+<ul><li><strong>Conclusions</strong>
+
+The results were not as good as expected. We found however, little success using Simulating Annealing with bonding matrices. The biggest concentration of work was on finding a heuristic distance. In the case of the 2x2x2 cube, this distance didn’t prove to be very useful. However, I believe that it may work better in the 3x3x3 case, as it does not ignore the rotated solutions that appear in the 2x2x2 case.
+</li></ul>
+
+
+<ul><li><strong>References</strong>
+<p>Berlekamp, E.R., Conway, J.H. and Guy, R.K., <i> Winning Ways</i>, Academic Press, London, 1981.
+<p>Fiat,A., Moses,S.,Shamir,A.,Shimshoni,I. and Tardos,G.,&quot;Planning and Learning in Permutation Groups&quot;, Proceedings of the 30th A.C.M. Foundations of Computer Science (FOCS) 1989, pp. 274-279.
+<p>Hofstadter, D.R. &quot;Metamagical Themas: The Magic Cube's Cubies are Twiddled by Cubists and Solved by Cubemeisters.&quot;  <i>Sci. Amer.</i> <b>244</b>, 20-39, Mar. 1981.
+<p>Larson, M.E. &quot;Rubik's Revenge: The Group Theoretical Solution.&quot; <i>Amer. Math. Monthly</i> <b>92</b>, 381-390, 1985.
+<p>Turner, E.C. and Gold, K.F. &quot;Rubik's Groups.&quot; <i>Amer. Math. Monthly</i> <b>92</b>, 617-629, 1985.
+<p>Weisstein, E.W. . &quot;Rubik's Cube.&quot; From <a href="/"><i>MathWorld</i></a>--A Wolfram Web Resource. <a href="http://mathworld.wolfram.com/RubiksCube.html">http://mathworld.wolfram.com/RubiksCube.html</a>
+</li></ul>
+
+<ul><li><strong>Links</strong>
+<p><a href="http://home.t-online.de/home/kociemba/cube.htm">http://home.t-online.de/home/kociemba/cube.htm</a>
+<p><a href="http://www.math.ucf.edu/~reid/Rubik/">http://www.math.ucf.edu/~reid/Rubik/</a>
+<p><a href="http://www.geocities.com/jaapsch/puzzles/theory.htm">http://www.geocities.com/jaapsch/puzzles/theory.htm</a>
+</li></ul>
+
+<div class="sig" align="right"><a href="http://plw.media.mit.edu/people/rocha">
+Carlos A. Rocha</a></div>
+
+<br/>&#8678; <a href="../">Back</a>
+
+</div>
+
+<br>
+<a href=edit_index.html title="site_edit_link"><font size=1>edit</font></a>
