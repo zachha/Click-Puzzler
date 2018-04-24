@@ -1,0 +1,35 @@
+#topScore {
+    margin-right: 15px;
+    float: right;
+    font-size: 1em;
+}
+
+#display {
+    margin-top: 20px;
+   font-size: 2em;
+}
+
+.correct {
+    color: #71f442;
+}
+
+.incorrect {
+    color: red;
+}
+
+#score {
+    float: right;
+   margin-bottom:15px;
+   font-size: 1em;
+}
+
+#appTitle {
+    float: left;
+    margin-top: 15px;
+    font-size: 2em;
+}
+
+.navbar {
+    display: inline-block;
+    width: 100%;
+}
