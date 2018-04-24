@@ -1,6 +1,6 @@
 # Click Puzzler
 
-![Rubix Cube](./src/img/rubixTen.jpg "rubix cube")
+![Rubix Cube](./src/img/rubixTen.png "rubix cube")
 
 Click Puzzler is a web application created using React.js. It is a single page application where the user must click on DIFFERENT pictures of rubix cubes as the pictures get mixed up after every click.  The application will keep track of the user's highest score while the page remains loaded using React's state management.  
 
