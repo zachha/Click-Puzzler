@@ -42,7 +42,7 @@ class App extends Component {
     console.log("image clicked");
     let clicked = this.state.alreadyClicked;
 
-    if(clicked.indexOf(name) > 0) {
+    if(clicked.indexOf(name) > -1) {
       this.setState({
         alreadyClicked: [],
         score: 0,
